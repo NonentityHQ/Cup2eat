@@ -1,0 +1,12 @@
+'use client';
+import {useState} from 'react';import Link from 'next/link';import {Star,Minus,Plus,Check,ShoppingCart,Zap,Leaf,Recycle,ShieldCheck,Sprout} from 'lucide-react';import {useRouter} from 'next/navigation';import {useCart} from '@/lib/cart';import {PACKS,inr} from '@/lib/data';
+export default function ProductView({p}){const [i,setI]=useState(2);const [q,setQ]=useState(1);const [ok,setOk]=useState(false);const {add}=useCart();const r=useRouter();
+const pk=p.fixed?p.fixed:PACKS[i];const item={id:p.slug+pk.n,slug:p.slug,name:p.name,pack:pk.n,price:pk.price,img:p.img};
+return <main className="pg"><div className="w"><p className="crumb"><Link href="/">Home</Link> › <Link href="/cups">Our Cups</Link> › {p.name}</p>
+<div className="pd"><div className="th">{[0,1,2].map(k=><button key={k} className={k===0?'on':''}><img src={p.big||p.img} alt=""/></button>)}</div>
+<div className="big"><img src={p.big||p.img} alt={p.name}/></div>
+<div><h1 style={{fontSize:32}}>{p.name}</h1><p style={{color:'#f0a91c',margin:'6px 0',display:'flex',alignItems:'center',gap:6}}><Star className="ic" fill="currentColor"/> {p.rating} <span style={{color:'var(--mu)',fontSize:13}}>({p.rev} Reviews)</span></p><p style={{color:'var(--mu)',fontSize:14}}>{p.desc}</p>
+<h4 style={{marginTop:18}}>Pack Size:</h4><div className="opts">{(p.fixed?[p.fixed]:PACKS).map((k,j)=><button key={k.n} className={'opt'+((p.fixed||j===i)?' on':'')} onClick={()=>setI(j)}>{k.n} Cups<br/><b>{inr(k.price)}</b></button>)}</div>
+<h4>Quantity</h4><div className="qty" style={{margin:'8px 0 20px'}}><button onClick={()=>setQ(Math.max(1,q-1))}><Minus className="ic"/></button><span>{q}</span><button onClick={()=>setQ(q+1)}><Plus className="ic"/></button></div>
+<div style={{display:'flex',gap:12,flexWrap:'wrap'}}><button className="btn o" onClick={()=>{add(item,q);setOk(true);setTimeout(()=>setOk(false),1300)}}>{ok?<><Check className="ic"/> Added</>:<><ShoppingCart className="ic"/> Add to Cart</>}</button><button className="btn" onClick={()=>{add(item,q);r.push('/checkout')}}><Zap className="ic"/> Buy Now</button></div>
+<div className="strip" style={{margin:'30px 0 0',gridTemplateColumns:'repeat(4,1fr)',padding:10}}>{[[Leaf,'100% Edible'],[Recycle,'No Plastic Waste'],[ShieldCheck,'Food-Grade'],[Sprout,'Biodegradable']].map(([I,b])=><div key={b} style={{fontSize:11}}><em><I className="ic"/></em>{b}</div>)}</div></div></div></div></main>}

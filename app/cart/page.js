@@ -1,0 +1,8 @@
+'use client';
+import Link from 'next/link';import {Minus,Plus,Trash2,ArrowRight} from 'lucide-react';import {useCart} from '@/lib/cart';import {inr} from '@/lib/data';
+export default function Cart(){const {items,setQty,remove,total,count}=useCart();
+return <main className="pg"><div className="w"><h1 style={{fontSize:30,marginBottom:18}}>My Cart ({count} Items)</h1>
+{!items.length?<div className="box ok"><p>Your cart is empty.</p><br/><Link className="btn" href="/cups">Shop Edible Cups</Link></div>:
+<div className="two"><div className="box">{items.map(x=><div className="ci" key={x.id}><div className="tn"><img src={x.img} alt={x.name}/></div><div style={{flex:1}}><b>{x.name}</b><br/><small style={{color:'var(--mu)'}}>{x.pack} Cups</small></div>
+<div className="qty"><button onClick={()=>setQty(x.id,x.qty-1)}><Minus className="ic"/></button><span>{x.qty}</span><button onClick={()=>setQty(x.id,x.qty+1)}><Plus className="ic"/></button></div><b style={{width:90,textAlign:'right'}}>{inr(x.price*x.qty)}</b><button onClick={()=>remove(x.id)} style={{background:'none',border:0,cursor:'pointer',fontSize:18}} aria-label="Remove"><Trash2 className="ic"/></button></div>)}</div>
+<div className="box" style={{alignSelf:'start'}}><h3>Order Summary</h3><div className="row"><span>Subtotal</span><span>{inr(total)}</span></div><div className="row"><span>Shipping</span><span>Free</span></div><div className="row t"><span>Total</span><span>{inr(total)}</span></div><Link className="btn" style={{width:'100%',justifyContent:'center',marginTop:12}} href="/checkout">Proceed to Checkout <ArrowRight className="ic"/></Link></div></div>}</div></main>}

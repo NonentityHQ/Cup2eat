@@ -1,0 +1,10 @@
+'use client';
+import {useState} from 'react';import Link from 'next/link';import {Check,Lock,Circle,CircleDot,Smartphone,CreditCard,Landmark,Wallet} from 'lucide-react';import {useCart} from '@/lib/cart';import {inr} from '@/lib/data';
+const PI=[Smartphone,CreditCard,Landmark,Wallet];const pays=['UPI (GPay, PhonePe, Paytm)','Credit / Debit Card','Net Banking','Wallet'];
+export default function Checkout(){const {items,total,clear}=useCart();const [m,setM]=useState(0);const [done,setDone]=useState(false);
+if(done)return <main className="pg"><div className="w"><div className="box ok"><b><Check className="ic"/></b><h2>Order Placed!</h2><p style={{color:'var(--mu)',margin:'8px 0 18px'}}>Thank you for choosing CUP2EAT.</p><Link className="btn" href="/cups">Continue Shopping</Link></div></div></main>;
+return <main className="pg"><div className="w"><h1 style={{fontSize:30,marginBottom:18}}>Checkout</h1><div className="two"><div className="box"><h3>Delivery Address</h3>
+<input className="fld" placeholder="Full Name"/><input className="fld" placeholder="Mobile Number"/><input className="fld" placeholder="Address"/><div style={{display:'flex',gap:10}}><input className="fld" placeholder="City"/><input className="fld" placeholder="Pincode"/></div>
+<h3 style={{margin:'18px 0 4px'}}>Payment Method</h3>{pays.map((x,i)=>{const I=PI[i];return <div key={x} className={'pay'+(m===i?' on':'')} onClick={()=>setM(i)}>{m===i?<CircleDot className="ic" style={{color:'var(--g)'}}/>:<Circle className="ic"/>}<span style={{flex:1}}>{x}</span><I className="ic"/></div>})}</div>
+<div className="box" style={{alignSelf:'start'}}><h3>Order Summary</h3>{items.map(x=><div className="row" key={x.id}><span>{x.name} × {x.qty}</span><span>{inr(x.price*x.qty)}</span></div>)}<div className="row t"><span>Total</span><span>{inr(total)}</span></div>
+<button className="btn" disabled={!items.length} style={{width:'100%',justifyContent:'center',marginTop:12}} onClick={()=>{clear();setDone(true)}}><Lock className="ic"/> Pay {inr(total)}</button></div></div></div></main>}
